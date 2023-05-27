@@ -8,4 +8,5 @@ RUN set -xe \
 RUN pip install --upgrade pip
 RUN pip3 install -r requirements.txt
 COPY main.py main.py
-CMD ["uvicorn", "main:app" , "--port=9988", "--reload"]
+EXPOSE 9988
+CMD ["uvicorn", "main:app" , "--host=0.0.0.0", "--port=9988", "--reload"]
