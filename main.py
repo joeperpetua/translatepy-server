@@ -15,6 +15,10 @@ app = FastAPI()
 google = GoogleTranslateV2()
 deepl = DeeplTranslate()
 
+@app.get("/check")
+def checkResponse():
+    return {'status': 'Ok'}
+
 @app.post("/translate/")
 def handleTranslation(html: Annotated[str, Form()], target_language: Annotated[str, Form()], service: Annotated[str, Form()]):
     logging.info(f'[POST] [translate] --- Processing request.')
