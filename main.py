@@ -35,19 +35,19 @@ def handleTranslation(html: Annotated[str, Form()], target_language: Annotated[s
             valid_service = False
 
     except NoResult as err:
-        logging.ERROR(f'[POST] [translate] Failed to process request. {err}')
+        logging.error(f'[POST] [translate] Failed to process request. {err}')
         raise HTTPException(status_code=500, detail=f"No result for query was retrieved. Params: {html}, {target_language}, {service}. Stack trace: {err}")
     except UnknownLanguage as err:
-        logging.ERROR(f'[POST] [translate] Failed to process request. {err}')
+        logging.error(f'[POST] [translate] Failed to process request. {err}')
         raise HTTPException(status_code=400, detail=f"An error occured while searching for the language you passed in. Similarity: {round(err.similarity)}. Stack trace: {err}")
     except TranslatepyException as err:
-        logging.ERROR(f'[POST] [translate] Failed to process request. {err}')
+        logging.error(f'[POST] [translate] Failed to process request. {err}')
         raise HTTPException(status_code=500, detail=f"An error occured while translating with translatepy. Stack trace: {err}")
     except Exception as err:
-        logging.ERROR(f'[POST] [translate] Failed to process request. {err}')
+        logging.error(f'[POST] [translate] Failed to process request. {err}')
         raise HTTPException(status_code=500, detail=f"An unknown error occured. Stack trace: {err}")
     if not valid_service:
-        logging.ERROR(f'[POST] [translate] Failed to process request. Not valid service {service}')
+        logging.error(f'[POST] [translate] Failed to process request. Not valid service {service}')
         raise HTTPException(status_code=400, detail=f"Unknown service: {service}")
     
     # remove backslashes for quotes
