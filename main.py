@@ -1,3 +1,4 @@
+import sys
 from fastapi import FastAPI, HTTPException, Form
 from typing import Annotated
 from translatepy import Translator
@@ -7,7 +8,11 @@ import urllib3
 import regex
 import logging
 
-logging.basicConfig(filename='server.log', level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s', handlers=[
+    logging.FileHandler("server.log"),
+    logging.StreamHandler(sys.stdout)
+])
+
 logging.info(f'[POST] [translate] ===== Starting service =====')
 
 urllib3.disable_warnings()
@@ -54,6 +59,10 @@ def handleTranslation(html: Annotated[str, Form()], target_language: Annotated[s
     formatted_result = regex.sub(f'\"', "'", result)
     # remove \n
     formatted_result = regex.sub(f'\n', "", formatted_result)
+    # add space next to < >
+    formatted_result = regex.sub(f'<', " <", formatted_result)
+    formatted_result = regex.sub(f'>', "> ", formatted_result)
+    
     response.append({
         "service": str(service),
         "target_language": str(target_language),
